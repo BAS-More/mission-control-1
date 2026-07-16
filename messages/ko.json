@@ -104,6 +104,7 @@
     "integrations": "통합",
     "debug": "디버그",
     "settings": "설정",
+    "palMcp": "PAL MCP",
     "group": {
       "observe": "모니터링",
       "automate": "자동화",

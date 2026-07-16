@@ -104,6 +104,7 @@
     "integrations": "Интеграции",
     "debug": "Отладка",
     "settings": "Настройки",
+    "palMcp": "PAL MCP",
     "group": {
       "observe": "МОНИТОРИНГ",
       "automate": "АВТОМАТИЗАЦИЯ",

@@ -104,6 +104,7 @@
     "integrations": "集成",
     "debug": "调试",
     "settings": "设置",
+    "palMcp": "PAL MCP",
     "group": {
       "observe": "监控",
       "automate": "自动化",

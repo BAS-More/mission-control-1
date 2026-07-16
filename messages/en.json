@@ -105,6 +105,7 @@
     "integrations": "Integrations",
     "debug": "Debug",
     "settings": "Settings",
+    "palMcp": "PAL MCP",
     "group": {
       "observe": "OBSERVE",
       "automate": "AUTOMATE",

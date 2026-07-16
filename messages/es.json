@@ -104,6 +104,7 @@
     "integrations": "Integraciones",
     "debug": "Depuración",
     "settings": "Ajustes",
+    "palMcp": "PAL MCP",
     "group": {
       "observe": "OBSERVAR",
       "automate": "AUTOMATIZAR",

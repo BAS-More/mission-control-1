@@ -36,6 +36,7 @@ const navGroups: NavGroup[] = [
       { id: 'channels', label: 'Channels', icon: <ChannelsIcon />, priority: false },
       { id: 'skills', label: 'Skills', icon: <SkillsIcon />, priority: false },
       { id: 'memory', label: 'Memory', icon: <MemoryIcon />, priority: false },
+      { id: 'pal-mcp', label: 'PAL MCP', icon: <PalMcpIcon />, priority: false, essential: true },
     ],
   },
   {
@@ -110,6 +111,7 @@ const navItemTranslationKeys: Record<string, string> = {
   integrations: 'integrations',
   debug: 'debug',
   settings: 'settings',
+  'pal-mcp': 'palMcp',
 }
 
 // Map group IDs to translation keys in the 'nav.group' namespace
@@ -1538,6 +1540,19 @@ function MonitorIcon() {
       <rect x="1" y="2" width="14" height="10" rx="1.5" />
       <polyline points="4,9 6,6 8,8 12,4" />
       <path d="M5 14h6" />
+    </svg>
+  )
+}
+
+function PalMcpIcon() {
+  return (
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="8" cy="8" r="2.5" />
+      <circle cx="3" cy="3" r="1.5" />
+      <circle cx="13" cy="3" r="1.5" />
+      <circle cx="3" cy="13" r="1.5" />
+      <circle cx="13" cy="13" r="1.5" />
+      <path d="M4.5 4.5l2 2M11.5 4.5l-2 2M4.5 11.5l2-2M11.5 11.5l-2-2" />
     </svg>
   )
 }
