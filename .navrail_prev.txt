@@ -441,7 +441,7 @@ export function NavRail() {
                 <span className="text-2xs font-bold text-foreground group-hover:text-void-cyan transition-colors">builderz</span>
                 <span className="text-[9px] px-1 py-px rounded bg-void-cyan/15 text-void-cyan">.dev</span>
               </div>
-              <p className="text-[10px] text-muted-foreground/70 leading-snug">AI-native dev shop · Solana experts.</p>
+              <p className="text-[10px] text-muted-foreground/70 leading-snug">AI-native dev shop ┬À Solana experts.</p>
             </a>
           </div>
         )}
@@ -678,7 +678,7 @@ function MobileBottomSheet({ open, onClose, activeTab, navigateToPanel, groups }
                 </span>
               </div>
 
-              {/* 2-column grid — flatten nested children for mobile */}
+              {/* 2-column grid ÔÇö flatten nested children for mobile */}
               <div className="grid grid-cols-2 gap-1.5">
                 {group.items.flatMap(item => item.children ? item.children : [item]).map((item) => (
                   <Button
@@ -849,7 +849,7 @@ function ContextSwitcher({ currentUser, isAdmin, isLocal, isConnected, tenants, 
       <Button
         variant="ghost"
         onClick={() => setOpen(!open)}
-        title={expanded ? undefined : `${userName} · ${contextLine} · ${connectionLabel}`}
+        title={expanded ? undefined : `${userName} ┬À ${contextLine} ┬À ${connectionLabel}`}
         className={`flex items-center rounded-lg ${
           expanded
             ? 'w-full gap-2.5 px-2.5 py-2 h-auto hover:bg-secondary/80 border border-transparent hover:border-border justify-start'
@@ -927,7 +927,7 @@ function ContextSwitcher({ currentUser, isAdmin, isLocal, isConnected, tenants, 
                   <div className="text-sm font-medium text-foreground truncate">{userName}</div>
                   <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
                     <span>{currentUser?.role || 'user'}</span>
-                    <span className="text-muted-foreground/30">·</span>
+                    <span className="text-muted-foreground/30">┬À</span>
                     <span className={`flex items-center gap-1`}>
                       <span className={`w-1.5 h-1.5 rounded-full inline-block ${connectionDotClass}`} />
                       {connectionLabel}
@@ -946,7 +946,7 @@ function ContextSwitcher({ currentUser, isAdmin, isLocal, isConnected, tenants, 
                   onClick={async () => {
                     if (interfaceMode === 'essential') return
                     setInterfaceMode('essential')
-                    const essentialIds = new Set(['overview', 'agents', 'tasks', 'chat', 'activity', 'logs', 'settings', 'pal-mcp'])
+                    const essentialIds = new Set(['overview', 'agents', 'tasks', 'chat', 'activity', 'logs', 'settings'])
                     if (!essentialIds.has(activeTab)) navigateToPanel('overview')
                     try { await fetch('/api/settings', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ settings: { 'general.interface_mode': 'essential' } }) }) } catch {}
                   }}
@@ -1056,7 +1056,7 @@ function ContextSwitcher({ currentUser, isAdmin, isLocal, isConnected, tenants, 
                       onNewProject={() => { setShowProjectManagerModal(true); setOpen(false) }}
                     />
                   ))}
-                  {/* Discovered OS users not yet linked to a tenant — shown inline as unprovisioned orgs */}
+                  {/* Discovered OS users not yet linked to a tenant ÔÇö shown inline as unprovisioned orgs */}
                   {unlinkedOsUsers.map((osUser) => {
                     const hasTools = osUser.has_claude || osUser.has_codex
                     const disabled = isLocal && !hasTools
@@ -1075,8 +1075,8 @@ function ContextSwitcher({ currentUser, isAdmin, isLocal, isConnected, tenants, 
                         onClick={() => { if (!disabled) { navigateToPanel('super-admin'); setOpen(false) } }}
                         disabled={disabled}
                         title={disabled
-                          ? `${osUser.username} — no claude or codex installed at ${osUser.home_dir}`
-                          : `${osUser.home_dir} (uid ${osUser.uid}) — click to provision as organization`
+                          ? `${osUser.username} ÔÇö no claude or codex installed at ${osUser.home_dir}`
+                          : `${osUser.home_dir} (uid ${osUser.uid}) ÔÇö click to provision as organization`
                         }
                         className={`w-full flex items-center gap-2 px-2 py-1.5 h-auto rounded-md text-xs justify-start ${
                           disabled
@@ -1100,7 +1100,7 @@ function ContextSwitcher({ currentUser, isAdmin, isLocal, isConnected, tenants, 
                     <Button
                       variant="ghost"
                       disabled
-                      title="Temporarily disabled — not functional yet"
+                      title="Temporarily disabled ÔÇö not functional yet"
                       className="w-full flex items-center gap-2 px-2 py-1.5 h-auto rounded-md text-xs justify-start text-muted-foreground/40 cursor-not-allowed"
                     >
                       <div className="w-5 h-5 flex items-center justify-center text-muted-foreground/40">
