@@ -1,8 +1,6 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { useTranslations } from 'next-intl'
-import { Button } from '@/components/ui/button'
 
 interface PalMcpStatus {
   version: string
@@ -49,7 +47,6 @@ const STATIC_DATA: PalMcpStatus = {
 }
 
 export function PalMcpPanel() {
-  const t = useTranslations('nav')
   const [status] = useState<PalMcpStatus>(STATIC_DATA)
   const [loading, setLoading] = useState(true)
 
