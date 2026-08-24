@@ -113,6 +113,8 @@ export async function POST(request: NextRequest) {
 
     return response
   } catch (error: any) {
-    return NextResponse.json({ error: error?.message || 'Google login failed' }, { status: 400 })
+    const message = error?.message || 'Google login failed'
+    const status = /timed out/i.test(message) ? 504 : 400
+    return NextResponse.json({ error: message }, { status })
   }
 }

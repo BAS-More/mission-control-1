@@ -560,15 +560,23 @@ async function callClaudeDirectly(
 
   logger.info({ taskId: task.id, model, agent: task.agent_name }, 'Dispatching task via direct Claude API')
 
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01',
-    },
-    body: JSON.stringify(body),
-  })
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), 120_000)
+  let res: Response
+  try {
+    res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+      },
+      body: JSON.stringify(body),
+      signal: controller.signal,
+    })
+  } finally {
+    clearTimeout(timeout)
+  }
 
   if (!res.ok) {
     const errorBody = await res.text().catch(() => '')
@@ -783,11 +791,19 @@ async function callOpenAICompatible(
   logger.info({ taskId: task.id, model, agent: task.agent_name, provider: providerLabel },
     `Dispatching task via direct ${providerLabel} API`)
 
-  const res = await fetch(`${endpoint.replace(/\/$/, '')}/chat/completions`, {
-    method: 'POST',
-    headers,
-    body: JSON.stringify(body),
-  })
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), 120_000)
+  let res: Response
+  try {
+    res = await fetch(`${endpoint.replace(/\/$/, '')}/chat/completions`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(body),
+      signal: controller.signal,
+    })
+  } finally {
+    clearTimeout(timeout)
+  }
 
   if (!res.ok) {
     const errorBody = await res.text().catch(() => '')

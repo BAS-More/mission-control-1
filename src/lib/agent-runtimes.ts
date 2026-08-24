@@ -72,10 +72,10 @@ async function downloadAndReviewScript(
 
   const regexReport = scanForInjection(content, { context: 'shell' })
   if (!regexReport.safe) {
-    const criticals = regexReport.matches.filter(m => m.severity === 'critical')
-    if (criticals.length > 0) {
-      job.output += '> SECURITY: Downloaded script blocked by injection guard:\n'
-      for (const m of criticals) {
+    const findings = regexReport.matches.filter(m => m.severity === 'critical' || m.severity === 'warning')
+    if (findings.length > 0) {
+      job.output += '> SECURITY: Downloaded script blocked by injection guard (critical/warning severity):\n'
+      for (const m of findings) {
         job.output += `>   [${m.rule}] ${m.description}: ${m.matched}\n`
       }
       rmSync(tempDir, { recursive: true, force: true })
@@ -84,16 +84,22 @@ async function downloadAndReviewScript(
   }
 
   // 3. AI security review (if ANTHROPIC_API_KEY is available)
-  const aiReview = await reviewScriptWithAI(content, url)
-  if (aiReview && !aiReview.safe) {
-    job.output += `> SECURITY: AI review flagged the downloaded script:\n>   ${aiReview.detail}\n`
+  try {
+    const aiReview = await reviewScriptWithAI(content, url)
+    if (aiReview && !aiReview.safe) {
+      job.output += `> SECURITY: AI review flagged the downloaded script:\n>   ${aiReview.detail}\n`
+      rmSync(tempDir, { recursive: true, force: true })
+      return null
+    }
+    if (aiReview?.safe) {
+      job.output += '> Security review passed (regex + AI)\n'
+    } else {
+      job.output += '> Security review passed (regex only — set ANTHROPIC_API_KEY for AI review)\n'
+    }
+  } catch (err: any) {
+    job.output += `> SECURITY: AI review failed, blocking script execution:\n>   ${err.message}\n`
     rmSync(tempDir, { recursive: true, force: true })
     return null
-  }
-  if (aiReview?.safe) {
-    job.output += '> Security review passed (regex + AI)\n'
-  } else {
-    job.output += '> Security review passed (regex only — set ANTHROPIC_API_KEY for AI review)\n'
   }
 
   return { scriptPath, tempDir }
@@ -142,8 +148,9 @@ ${truncated}
     })
 
     if (!res.ok) {
-      logger.warn({ status: res.status }, 'AI script review failed — skipping')
-      return null
+      const errorBody = await res.text().catch(() => '(could not read error body)')
+      logger.warn({ status: res.status, body: errorBody }, 'AI script review API request failed')
+      throw new Error(`AI review API returned status ${res.status}`)
     }
 
     const data = await res.json() as { content: Array<{ type: string; text?: string }> }
@@ -154,8 +161,8 @@ ${truncated}
     }
     return { safe: true, detail: text }
   } catch (err: any) {
-    logger.warn({ err: err.message }, 'AI script review error — skipping')
-    return null
+    logger.warn({ err: err.message }, 'AI script review error — blocking install')
+    throw err
   }
 }
 

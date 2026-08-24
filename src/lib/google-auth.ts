@@ -15,7 +15,19 @@ export async function verifyGoogleIdToken(idToken: string): Promise<GoogleIdToke
   }
 
   const url = `https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(token)}`
-  const res = await fetch(url, { method: 'GET' })
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), 10_000)
+  let res: Response
+  try {
+    res = await fetch(url, { method: 'GET', signal: controller.signal })
+  } catch (err: any) {
+    if (err?.name === 'AbortError') {
+      throw new Error('Google token verification timed out')
+    }
+    throw err
+  } finally {
+    clearTimeout(timeout)
+  }
   if (!res.ok) {
     throw new Error('Invalid Google token')
   }
